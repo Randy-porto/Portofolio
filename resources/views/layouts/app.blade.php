@@ -12,7 +12,9 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preload" href="{{ asset('fonts/PlusJakartaSans.ttf') }}" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/portfolio.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
     <script src="{{ asset('js/portfolio.js') }}" defer></script>
+    <script src="{{ asset('js/gallery.js') }}" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main">Langsung ke konten</a>

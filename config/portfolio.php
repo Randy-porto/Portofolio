@@ -11,8 +11,14 @@ return [
         'semua' => 'Semua karya',
         'fotografi' => 'Fotografi',
         'film' => 'Film & video',
-        'konten' => 'Konten kreatif',
         'development' => 'Development',
+        'konten' => 'Konten kreatif',
+    ],
+    'gallery' => [
+        'fotografi' => ['description' => 'Potret, momen, dan cerita yang layak diabadikan.', 'format' => 'square'],
+        'film' => ['description' => 'Cerita bergerak, dari perjalanan hingga aftermovie.', 'format' => 'portrait'],
+        'development' => ['description' => 'Ide digital yang bertemu desain dan fungsi.', 'format' => 'square'],
+        'konten' => ['description' => 'Visual berkarakter untuk cerita sebuah brand.', 'format' => 'square'],
     ],
     // Semua entri di bawah adalah konsep demo, bukan klaim pengalaman nyata.
     // Ganti deskripsi, gambar, tahun, dan tautan dengan karya milik Anda.

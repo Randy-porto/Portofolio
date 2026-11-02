@@ -43,18 +43,37 @@
             </nav>
             <span class="work-count" aria-live="polite" id="work-count">{{ $category === 'semua' ? count($projects) : collect($projects)->where('category', $category)->count() }} karya</span>
         </div>
-        <div class="project-grid">
-            @foreach($projects as $project)
-                <article class="project-card" data-category="{{ $project['category'] }}" @if($category !== 'semua' && $category !== $project['category']) hidden @endif>
-                    <a class="project-image-link {{ $project['category'] }}" href="{{ route('projects.show', $project['slug']) }}" aria-label="Lihat {{ $project['subtitle'] }}">
-                        <img src="{{ asset($project['image']) }}" alt="{{ $project['alt'] }}" width="900" height="660" loading="lazy">
-                        <span class="project-type">{{ $project['label'] }}</span>
-                        @if($project['demo'])<span class="project-demo">KONSEP DEMO</span>@endif
-                        <span class="project-open"><x-icon size="22" /></span>
-                        @if($project['category'] === 'film')<span class="film-caption">{{ $project['demo'] ? 'A FILM CONCEPT' : 'A FILM' }} BY {{ strtoupper(config('portfolio.name')) }}</span>@endif
-                    </a>
-                    <div class="project-caption"><div><a href="{{ route('projects.show', $project['slug']) }}"><h3>{{ $project['subtitle'] }}</h3></a><p>{{ $project['title'] }}</p></div><span>{{ $project['year'] }}</span></div>
-                </article>
+        <div class="project-galleries">
+            @foreach(config('portfolio.gallery') as $key => $gallery)
+                @php($groupProjects = collect($projects)->where('category', $key))
+                @continue($groupProjects->isEmpty())
+                <section class="gallery-group" data-project-group="{{ $key }}" aria-labelledby="gallery-title-{{ $key }}" @if($category !== 'semua' && $category !== $key) hidden @endif>
+                    <div class="gallery-heading">
+                        <div class="gallery-intro">
+                            <div class="gallery-title-row"><span class="gallery-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span><h3 id="gallery-title-{{ $key }}">{{ config('portfolio.categories.'.$key) }}</h3><span class="gallery-total">{{ $groupProjects->count() }} karya</span></div>
+                            <p>{{ $gallery['description'] }}</p>
+                        </div>
+                        <div class="gallery-navigation" data-gallery-controls hidden>
+                            <button class="gallery-prev" type="button" data-gallery-direction="-1" aria-controls="gallery-track-{{ $key }}" aria-label="Geser {{ config('portfolio.categories.'.$key) }} ke kiri" disabled><x-icon name="right" size="18" /></button>
+                            <button type="button" data-gallery-direction="1" aria-controls="gallery-track-{{ $key }}" aria-label="Geser {{ config('portfolio.categories.'.$key) }} ke kanan" disabled><x-icon name="right" size="18" /></button>
+                        </div>
+                    </div>
+                    <div class="gallery-track" id="gallery-track-{{ $key }}" data-gallery-track role="region" tabindex="0" aria-labelledby="gallery-title-{{ $key }}" aria-describedby="gallery-hint-{{ $key }}">
+                        @foreach($groupProjects as $project)
+                            <article class="project-card" data-format="{{ $gallery['format'] }}" data-category="{{ $project['category'] }}" @if($category !== 'semua' && $category !== $project['category']) hidden @endif>
+                                <a class="project-image-link {{ $project['category'] }}" href="{{ route('projects.show', $project['slug']) }}" aria-label="Lihat {{ $project['subtitle'] }}">
+                                    <img class="{{ str_ends_with($project['image'], '.svg') ? 'illustration' : '' }}" src="{{ asset($project['image']) }}" alt="{{ $project['alt'] }}" width="{{ $gallery['format'] === 'portrait' ? 450 : 600 }}" height="{{ $gallery['format'] === 'portrait' ? 800 : 600 }}" loading="lazy">
+                                    <span class="project-type">{{ $project['label'] }}</span>
+                                    @if($project['demo'])<span class="project-demo">KONSEP DEMO</span>@endif
+                                    <span class="project-open"><x-icon size="22" /></span>
+                                    @if($project['category'] === 'film')<span class="film-caption">{{ $project['demo'] ? 'A FILM CONCEPT' : 'A FILM' }} BY {{ strtoupper(config('portfolio.name')) }}</span>@endif
+                                </a>
+                                <div class="project-caption"><div><a href="{{ route('projects.show', $project['slug']) }}"><h4>{{ $project['subtitle'] }}</h4></a><p>{{ $project['title'] }}</p></div><span>{{ $project['year'] }}</span></div>
+                            </article>
+                        @endforeach
+                    </div>
+                    <p class="gallery-hint" id="gallery-hint-{{ $key }}"><span data-gallery-scroll-hint hidden>Geser ke samping untuk melihat karya lainnya <x-icon name="right" size="14" /></span><span data-gallery-static-hint>{{ $groupProjects->count() }} karya dalam koleksi ini</span><span class="gallery-format">{{ $gallery['format'] === 'portrait' ? '9:16 / PORTRAIT' : '1:1 / SQUARE' }}</span></p>
+                </section>
             @endforeach
         </div>
         @if(collect($projects)->contains('demo', true))<p class="demo-note"><span>↳</span> Galeri ini berisi konsep demo sebagai gambaran gaya karya. Proyek dan dokumentasi asli akan ditambahkan.</p>@endif

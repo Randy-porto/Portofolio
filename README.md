@@ -8,6 +8,9 @@ Portofolio personal berbasis **Laravel 12 + Blade**, CSS, dan JavaScript murni. 
 
 - Beranda, profil, bidang pengalaman, layanan, dan kontak dalam bahasa Indonesia.
 - Empat konsep karya: foto wisuda, aftermovie, konten brand, dan web development.
+- Galeri terpisah berurutan: Fotografi → Film & video → Development → Konten kreatif.
+- Setiap kategori memakai baris horizontal; bisa digeser saat jumlah kartu melebihi lebar layar, dengan panah, sentuhan, atau tombol keyboard.
+- Thumbnail 1:1 untuk fotografi, development, dan konten; 9:16 untuk video. Lebar kartu tetap agar tidak memenuhi layar.
 - Filter kategori yang juga berfungsi tanpa JavaScript; URL filter bisa dibagikan.
 - Halaman detail karya, navigasi karya berikutnya, dan halaman 404/429.
 - Formulir kontak dengan CSRF, validasi server, honeypot, dan batas 5 pengiriman per menit per IP.
@@ -73,6 +76,8 @@ Kemudian jalankan `php artisan config:clear` dan `php artisan migrate`. Pesan ya
 | Tampilan detail karya | `resources/views/project.blade.php` |
 | Navigasi dan footer | `resources/views/layouts/app.blade.php` |
 | Warna, font, tata letak, responsivitas | `public/css/portfolio.css` |
+| Ukuran kartu dan baris galeri horizontal | `public/css/gallery.css` |
+| Panah dan navigasi keyboard galeri | `public/js/gallery.js` |
 | Filter, menu ponsel, shortcut layanan | `public/js/portfolio.js` |
 
 Contoh pengisian identitas (gunakan data milik Anda):
@@ -92,6 +97,10 @@ php artisan optimize:clear
 ```
 
 Untuk menambah karya, salin satu entri pada `projects` di `config/portfolio.php`. Gunakan slug unik, kategori yang tersedia, dan path gambar relatif terhadap `public`. Ubah `demo` menjadi `false` setelah benar-benar mengganti seluruh materi dengan proyek asli. Label dan penjelasan demo mengikuti nilai ini. Metadata seperti tahun, peran, tools, deskripsi, pendekatan, dan hasil disunting di entri yang sama.
+
+Karya baru otomatis masuk ke baris kategorinya. Saat ini ada satu demo per kategori; panah dan petunjuk geser baru muncul jika karya melebihi lebar baris. Di ponsel, geser dengan sentuhan. Di komputer, gunakan panah atau trackpad; saat baris mendapat fokus, tombol ←/→ menggeser satu kartu dan Home/End menuju awal/akhir koleksi. Filter hanya menampilkan koleksi yang dipilih; **Semua karya** menampilkan keempat koleksi.
+
+Atur rasio per kategori di bagian `gallery` pada `config/portfolio.php`: `format => 'square'` untuk 1:1 atau `format => 'portrait'` untuk 9:16. Gambar sumber tetap tersimpan dalam ukuran aslinya; rasio ini berlaku pada thumbnail galeri. Preview development memakai `contain` agar seluruh mockup tetap terlihat.
 
 Video asli belum disertakan; untuk aftermovie, tambahkan file atau embed karya milik sendiri pada halaman detail. Tidak ada tombol play palsu atau video yang mengaku sebagai karya pemilik.
 

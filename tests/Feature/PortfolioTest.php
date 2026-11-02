@@ -42,6 +42,28 @@ class PortfolioTest extends TestCase
         $this->get('/?kategori[]=fotografi')->assertOk()->assertViewHas('category', 'semua');
     }
 
+    public function test_all_works_are_grouped_in_requested_order_and_filter_hides_other_collections(): void
+    {
+        $this->get('/')->assertOk()->assertSeeInOrder([
+            'data-project-group="fotografi"',
+            'data-project-group="film"',
+            'data-project-group="development"',
+            'data-project-group="konten"',
+        ], false);
+
+        $html = $this->get('/?kategori=film')->assertOk()->getContent();
+        $dom = new \DOMDocument;
+        $previous = libxml_use_internal_errors(true);
+        $dom->loadHTML('<?xml encoding="UTF-8">'.$html);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+        $xpath = new \DOMXPath($dom);
+
+        $this->assertSame(1, $xpath->query('//section[@data-project-group and not(@hidden)]')->length);
+        $this->assertSame('film', $xpath->query('//section[@data-project-group and not(@hidden)]')->item(0)->getAttribute('data-project-group'));
+        $this->assertSame(0, $xpath->query('//section[@data-project-group="fotografi"]//article[@data-category!="fotografi"]')->length);
+    }
+
     public function test_unknown_project_has_a_real_not_found_response(): void
     {
         $this->get('/karya/does-not-exist')->assertNotFound()->assertSee('Cerita ini');

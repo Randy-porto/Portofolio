@@ -30,6 +30,7 @@ window.matchMedia('(min-width: 761px)').addEventListener('change', event => {
 // Category links retain a real server-rendered URL and work without JavaScript.
 const filters = [...document.querySelectorAll('[data-filter]')];
 const projects = [...document.querySelectorAll('.project-card')];
+const projectGroups = [...document.querySelectorAll('[data-project-group]')];
 function applyFilter(category) {
     if (!filters.some(link => link.dataset.filter === category)) category = 'semua';
     filters.forEach(link => {
@@ -39,6 +40,9 @@ function applyFilter(category) {
         else link.removeAttribute('aria-current');
     });
     let count = 0;
+    projectGroups.forEach(group => {
+        group.hidden = category !== 'semua' && group.dataset.projectGroup !== category;
+    });
     projects.forEach(project => {
         const show = category === 'semua' || project.dataset.category === category;
         project.hidden = !show;
