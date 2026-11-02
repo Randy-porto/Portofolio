@@ -8,6 +8,8 @@ Portofolio personal berbasis **Laravel 12 + Blade**, CSS, dan JavaScript murni. 
 
 - Beranda, profil, bidang pengalaman, layanan, dan kontak dalam bahasa Indonesia.
 - Empat konsep karya: foto wisuda, aftermovie, konten brand, dan web development.
+- Setiap karya berisi enam visual orisinal yang dibuat dengan AI sesuai temanya: total 24 gambar, siap untuk mencoba scroll horizontal.
+- Klik kartu untuk membuka gambar yang sama di halaman detail; enam thumbnail detail juga bisa dipilih tanpa JavaScript.
 - Galeri terpisah berurutan: Fotografi → Film & video → Development → Konten kreatif.
 - Setiap kategori memakai baris horizontal; bisa digeser saat jumlah kartu melebihi lebar layar, dengan panah, sentuhan, atau tombol keyboard.
 - Thumbnail 1:1 untuk fotografi, development, dan konten; 9:16 untuk video. Lebar kartu tetap agar tidak memenuhi layar.
@@ -98,9 +100,20 @@ php artisan optimize:clear
 
 Untuk menambah karya, salin satu entri pada `projects` di `config/portfolio.php`. Gunakan slug unik, kategori yang tersedia, dan path gambar relatif terhadap `public`. Ubah `demo` menjadi `false` setelah benar-benar mengganti seluruh materi dengan proyek asli. Label dan penjelasan demo mengikuti nilai ini. Metadata seperti tahun, peran, tools, deskripsi, pendekatan, dan hasil disunting di entri yang sama.
 
-Karya baru otomatis masuk ke baris kategorinya. Saat ini ada satu demo per kategori; panah dan petunjuk geser baru muncul jika karya melebihi lebar baris. Di ponsel, geser dengan sentuhan. Di komputer, gunakan panah atau trackpad; saat baris mendapat fokus, tombol ←/→ menggeser satu kartu dan Home/End menuju awal/akhir koleksi. Filter hanya menampilkan koleksi yang dipilih; **Semua karya** menampilkan keempat koleksi.
+Karya baru otomatis masuk ke baris kategorinya. Saat ini ada satu karya demo per kategori dengan enam gambar berbeda untuk setiap karya. Karena setiap baris berisi enam kartu, scroll dan tombol panah langsung bisa dicoba pada desktop maupun ponsel. Jumlah karya dan jumlah gambar dihitung terpisah: empat karya, 24 gambar. Di ponsel, geser dengan sentuhan. Di komputer, gunakan panah atau trackpad; saat baris mendapat fokus, tombol ←/→ menggeser satu kartu dan Home/End menuju awal/akhir koleksi. Filter hanya menampilkan koleksi yang dipilih; **Semua karya** menampilkan keempat koleksi.
 
 Atur rasio per kategori di bagian `gallery` pada `config/portfolio.php`: `format => 'square'` untuk 1:1 atau `format => 'portrait'` untuk 9:16. Gambar sumber tetap tersimpan dalam ukuran aslinya; rasio ini berlaku pada thumbnail galeri. Preview development memakai `contain` agar seluruh mockup tetap terlihat.
+
+Setiap proyek dapat mempunyai array `visuals`. Untuk menambahkan foto milik sendiri, simpan file ke `public/images` dan tambahkan misalnya:
+
+```php
+'visuals' => [
+    ['image' => 'images/wisuda-01.jpg', 'caption' => 'Portrait wisuda', 'alt' => 'Deskripsi foto pertama'],
+    ['image' => 'images/wisuda-02.jpg', 'caption' => 'Bersama teman', 'alt' => 'Deskripsi foto kedua'],
+],
+```
+
+Gambar demo AI disimpan sebagai empat lembar berisi enam visual (grid 3 × 2) di `public/images/demo`. Properti `tile` bernilai `0`–`5` memilih bagian gambar melalui CSS; tidak ada duplikasi file besar untuk tiap kartu. Urutannya: kiri atas, tengah atas, kanan atas, kiri bawah, tengah bawah, kanan bawah. Untuk foto biasa, cukup hilangkan `tile`. Jika tidak ada `visuals`, gambar utama `image` proyek tetap dapat ditampilkan. Halaman detail mengikuti pilihan `?gambar=1` sampai `?gambar=6`.
 
 Video asli belum disertakan; untuk aftermovie, tambahkan file atau embed karya milik sendiri pada halaman detail. Tidak ada tombol play palsu atau video yang mengaku sebagai karya pemilik.
 

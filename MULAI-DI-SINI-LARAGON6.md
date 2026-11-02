@@ -140,6 +140,8 @@ php artisan optimize:clear
 
 Refresh browser. Daftar karya dan layanan ada di `config/portfolio.php`. Gambar diletakkan di `public/images`. Semua karya awal adalah konsep demo, dan video aftermovie asli belum disertakan. Ganti materi dan deskripsinya dengan karya sendiri sebelum mengubah `demo` menjadi `false`.
 
+Untuk mencoba scroll, buka bagian **Semua karya**. Setiap karya sudah dilengkapi enam gambar demo orisinal, sehingga semua baris kategori bisa langsung digeser. Gunakan tombol panah di kanan judul kategori pada desktop atau geser dengan jari di ponsel. Klik salah satu gambar untuk melihatnya lebih besar; enam thumbnail pada halaman detail juga dapat dipilih. Gambar demo dibuat dengan AI sebagai ilustrasi, bukan dokumentasi klien nyata. Cara menggantinya dengan foto sendiri dijelaskan pada bagian `visuals` di README.
+
 ## Pesan kontak dan pengujian
 
 Formulir kontak menyimpan pesan di database. Untuk membacanya, buka terminal lain pada folder proyek:

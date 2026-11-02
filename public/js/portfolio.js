@@ -40,16 +40,20 @@ function applyFilter(category) {
         else link.removeAttribute('aria-current');
     });
     let count = 0;
+    const visibleProjects = new Set();
     projectGroups.forEach(group => {
         group.hidden = category !== 'semua' && group.dataset.projectGroup !== category;
     });
     projects.forEach(project => {
         const show = category === 'semua' || project.dataset.category === category;
         project.hidden = !show;
-        if (show) count++;
+        if (show) {
+            count++;
+            visibleProjects.add(project.dataset.projectSlug);
+        }
     });
     const counter = document.getElementById('work-count');
-    if (counter) counter.textContent = `${count} karya`;
+    if (counter) counter.textContent = `${visibleProjects.size} karya · ${count} gambar`;
 }
 filters.forEach(link => link.addEventListener('click', event => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;

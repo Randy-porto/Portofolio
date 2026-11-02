@@ -64,6 +64,55 @@ class PortfolioTest extends TestCase
         $this->assertSame(0, $xpath->query('//section[@data-project-group="fotografi"]//article[@data-category!="fotografi"]')->length);
     }
 
+    public function test_every_project_has_at_least_five_available_visuals_and_counts_are_not_inflated(): void
+    {
+        $expectedVisualCount = 0;
+        foreach (config('portfolio.projects') as $project) {
+            $this->assertGreaterThanOrEqual(5, count($project['visuals']));
+            $uniqueVisuals = [];
+            foreach ($project['visuals'] as $visual) {
+                $this->assertFileExists(public_path($visual['image']));
+                $uniqueVisuals[] = $visual['image'].':'.($visual['tile'] ?? 'full');
+            }
+            $this->assertCount(count($project['visuals']), array_unique($uniqueVisuals));
+            $expectedVisualCount += count($project['visuals']);
+        }
+
+        $this->get('/')->assertOk()->assertSee('4 karya · '.$expectedVisualCount.' gambar');
+        $this->get('/?kategori=fotografi')->assertOk()->assertSee('1 karya · 6 gambar');
+    }
+
+    public function test_each_visual_opens_the_matching_selected_image_on_its_project_page(): void
+    {
+        foreach (config('portfolio.projects') as $project) {
+            foreach ($project['visuals'] as $index => $visual) {
+                $this->get('/karya/'.$project['slug'].'?gambar='.($index + 1))
+                    ->assertOk()
+                    ->assertViewHas('selectedVisualIndex', $index)
+                    ->assertViewHas('selectedVisual', $visual)
+                    ->assertSee($visual['caption']);
+            }
+        }
+
+        foreach (['-1', '0', '9999', 'invalid', '1.5'] as $value) {
+            $this->get('/karya/graduation-stories?gambar='.$value)->assertOk()->assertViewHas('selectedVisualIndex', 0);
+        }
+        $this->get('/karya/graduation-stories?gambar[]=2')->assertOk()->assertViewHas('selectedVisualIndex', 0);
+    }
+
+    public function test_owner_can_still_use_a_single_normal_image_without_generated_tiles(): void
+    {
+        $projects = config('portfolio.projects');
+        unset($projects[0]['visuals']);
+        config(['portfolio.projects' => $projects]);
+
+        $this->get('/?kategori=fotografi')->assertOk()->assertSee('1 karya · 1 gambar');
+        $this->get('/karya/graduation-stories')->assertOk()
+            ->assertViewHas('selectedVisual', null)
+            ->assertSee($projects[0]['alt'])
+            ->assertDontSee('project-atlas');
+    }
+
     public function test_unknown_project_has_a_real_not_found_response(): void
     {
         $this->get('/karya/does-not-exist')->assertNotFound()->assertSee('Cerita ini');

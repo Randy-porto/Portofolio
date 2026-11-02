@@ -260,3 +260,128 @@
     .gallery-heading { flex-wrap: wrap; }
     .gallery-navigation { margin-left: auto; }
 }
+
+/* Each generated sheet contains six original square images (3 columns × 2 rows).
+   The viewport displays one cell, keeping the source sheet unchanged. */
+.project-visual {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+}
+
+.project-visual > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project-visual > img.illustration {
+    object-fit: contain;
+}
+
+.project-visual--atlas {
+    --atlas-scale: 1;
+}
+
+[data-format="portrait"] .project-visual--atlas {
+    --atlas-scale: 1.777777778;
+}
+
+.project-visual--atlas > .project-atlas {
+    position: absolute;
+    max-width: none;
+    width: calc(300% * var(--atlas-scale));
+    height: 200%;
+    left: calc(var(--tile-x) * -100% * var(--atlas-scale) - (var(--atlas-scale) - 1) * 50%);
+    top: calc(var(--tile-y) * -100%);
+    object-fit: fill;
+}
+
+.atlas-tile-0 { --tile-x: 0; --tile-y: 0; }
+.atlas-tile-1 { --tile-x: 1; --tile-y: 0; }
+.atlas-tile-2 { --tile-x: 2; --tile-y: 0; }
+.atlas-tile-3 { --tile-x: 0; --tile-y: 1; }
+.atlas-tile-4 { --tile-x: 1; --tile-y: 1; }
+.atlas-tile-5 { --tile-x: 2; --tile-y: 1; }
+
+.visual-number {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+    z-index: 1;
+    color: white;
+    background: #151613aa;
+    border-radius: 2px;
+    padding: 4px 6px;
+    font-size: 8px;
+    letter-spacing: .6px;
+}
+
+.detail-visual-wrap {
+    max-width: 690px;
+    margin-bottom: 25px;
+}
+
+.detail-visual-wrap--portrait {
+    max-width: 380px;
+}
+
+.detail-visual {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+.detail-visual[data-format="portrait"] {
+    aspect-ratio: 9 / 16;
+}
+
+.detail-visual-picker {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 4px 4px 12px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #65724d #252b20;
+}
+
+.detail-visual-picker > a {
+    flex: 0 0 130px;
+    scroll-snap-align: start;
+}
+
+.detail-visual-thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.detail-visual-picker [aria-current="true"] .detail-visual-thumb {
+    border-color: var(--lime);
+}
+
+.detail-visual-picker > a > span:last-child {
+    display: block;
+    margin-top: 8px;
+    font-size: 10px;
+    line-height: 1.6;
+    color: #a7b69a;
+}
+
+.detail-visual-caption {
+    margin-top: 18px;
+    margin-bottom: 60px;
+    color: #a7b69a;
+    font-size: 12px;
+}
+
+@media (max-width: 760px) {
+    .detail-visual-picker > a { flex-basis: 110px; }
+    .detail-visual-caption { margin-bottom: 35px; }
+    .gallery-total { font-size: 8px; }
+}
