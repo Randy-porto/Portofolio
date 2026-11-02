@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Laravel: jalankan server",
+            "type": "shell",
+            "command": "php",
+            "args": ["artisan", "serve"],
+            "problemMatcher": [],
+            "isBackground": true
+        },
+        {
+            "label": "Laravel: jalankan pengujian",
+            "type": "shell",
+            "command": "php",
+            "args": ["artisan", "test"],
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "Portofolio: lihat pesan masuk",
+            "type": "shell",
+            "command": "php",
+            "args": ["artisan", "portfolio:messages"],
+            "problemMatcher": []
+        }
+    ]
+}
